@@ -351,8 +351,12 @@ document.addEventListener('DOMContentLoaded', () => {
             combinedAudioBlob = null;
             audioPlaying = false;
 
-            // Send API keys as query parameters
-            const wsUrl = `ws://${window.location.host}/ws?assemblyai_key=${encodeURIComponent(apiKeys.assemblyai)}&murf_key=${encodeURIComponent(apiKeys.murf)}&gemini_key=${encodeURIComponent(apiKeys.gemini)}&tmdb_key=${encodeURIComponent(apiKeys.tmdb || '')}`;
+            // === FIX START ===
+            // Determine WebSocket protocol based on page protocol (http vs https)
+            const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+            const wsUrl = `${protocol}${window.location.host}/ws?assemblyai_key=${encodeURIComponent(apiKeys.assemblyai)}&murf_key=${encodeURIComponent(apiKeys.murf)}&gemini_key=${encodeURIComponent(apiKeys.gemini)}&tmdb_key=${encodeURIComponent(apiKeys.tmdb || '')}`;
+            // === FIX END ===
+            
             socket = new WebSocket(wsUrl);
 
             socket.onopen = async () => {
