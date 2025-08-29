@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VoiceAI Pro | The Future of Conversation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+    <script src="/static/main.js" defer></script>
+    <style>
+        :root {
+    --bg-color: #0a0e17;
+    --glass-bg: rgba(16, 24, 48, 0.6);
+    --border-color: rgba(100, 150, 255, 0.15);
+    --glow-color: rgba(0, 195, 255, 0.4);
+    --text-primary: #f5f7ff;
+    --text-secondary: #b0c2e0;
+    --text-muted: #7a8fb4;
+
+    --accent-cyan: #00d9ff;
+    --accent-magenta: #8a63d2;
+    --accent-purple: #6c56ee;
+    --accent-blue: #4a7eff;
+
+    --primary-gradient: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+    --secondary-gradient: linear-gradient(135deg, var(--accent-magenta), var(--accent-purple));
+    --accent-gradient: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+    
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --error-color: #ef4444;
+
+    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    overflow: hidden;
+    min-height: 100vh;
+    position: relative;
+    line-height: 1.6;
+}
+
+/* --- Aurora Background --- */
+#aurora-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    filter: blur(80px) brightness(0.7);
+}
+
+.aurora-shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: aurora-flow 30s linear infinite alternate;
+}
+
+.aurora-shape-1 {
+    width: 60vw;
+    height: 60vw;
+    top: -20%;
+    left: -20%;
+    background: radial-gradient(circle, var(--accent-purple), transparent 60%);
+}
+
+.aurora-shape-2 {
+    width: 50vw;
+    height: 50vw;
+    top: 10%;
+    right: -25%;
+    background: radial-gradient(circle, var(--accent-cyan), transparent 60%);
+    animation-delay: -5s;
+}
+
+.aurora-shape-3 {
+    width: 40vw;
+    height: 40vw;
+    bottom: -20%;
+    left: 30%;
+    background: radial-gradient(circle, var(--accent-magenta), transparent 60%);
+    animation-delay: -10s;
+}
+
+@keyframes aurora-flow {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    50% { transform: translate(10vw, 20vh) rotate(180deg) scale(1.2); }
+    100% { transform: translate(-10vw, -15vh) rotate(360deg) scale(1); }
+}
+
+/* --- Main App Container --- */
+#app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1000px;
+    height: 95vh;
+    margin: 2.5vh auto;
+    padding: 2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    box-shadow: var(--shadow-xl), 0 0 100px -20px rgba(108, 86, 238, 0.2) inset;
+    animation: fadeIn 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* --- Header --- */
+.app-header {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app-header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.app-header p {
+    color: var(--text-secondary);
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+.settings-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.settings-btn:hover {
+    color: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+    background: rgba(0, 217, 255, 0.1);
+    transform: rotate(30deg);
+}
+
+/* --- Core Control Section --- */
+#core-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 1rem 0;
+}
+
+#core-orb {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#core-pulse, #core-waves {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+#core-pulse {
+    background: var(--accent-gradient);
+    opacity: 0.1;
+    animation: pulse 4s ease-in-out infinite;
+}
+
+#core-waves {
+    border: 2px solid var(--accent-cyan);
+    opacity: 0;
+    animation: wave 3s ease-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(0.9); opacity: 0.1; }
+    50% { transform: scale(1.3); opacity: 0.2; }
+}
+
+@keyframes wave {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    100% { transform: scale(1.8); opacity: 0; }
+}
+
+#recordBtn {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: none;
+    background: var(--primary-gradient);
+    color: white;
+    font-size: 3.5rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 15px 35px rgba(108, 86, 238, 0.3), 0 0 20px rgba(74, 126, 255, 0.4) inset;
+}
+
+#recordBtn:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 20px 45px rgba(108, 86, 238, 0.4), 0 0 30px rgba(74, 126, 255, 0.5) inset;
+}
+
+#recordBtn:disabled { 
+    cursor: not-allowed; 
+    opacity: 0.6; 
+    background: rgba(16, 24, 48, 0.4);
+    box-shadow: none;
+}
+
+/* Recording State */
+#recordBtn.recording {
+    background: var(--secondary-gradient);
+    box-shadow: 0 15px 35px rgba(138, 99, 210, 0.3), 0 0 25px rgba(138, 99, 210, 0.4) inset;
+}
+
+#recordBtn.recording + #core-pulse {
+    background: var(--secondary-gradient);
+    animation-duration: 1.5s;
+}
+
+#recordBtn.recording + #core-pulse + #core-waves {
+     border-color: var(--accent-magenta);
+     animation-duration: 2s;
+}
+
+/* Processing State */
+#recordBtn.processing #btnIcon {
+    animation: processingRotate 1.5s linear infinite;
+}
+
+@keyframes processingRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+#llmBotStatus {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    min-height: 24px;
+    text-align: center;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.status-success { color: var(--success-color) !important; }
+.status-error { color: var(--error-color) !important; }
+
+/* --- Conversation Section --- */
+#conversation-container {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 1.5rem 0;
+    background: rgba(10, 14, 23, 0.4);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+}
+
+#streamTranscription {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+}
+
+/* Welcome message */
+.welcome-message {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+.welcome-message h3 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.feature-list {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-top: 2rem;
+}
+
+.feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.feature-item i {
+    font-size: 1.75rem;
+    color: var(--accent-cyan);
+    background: rgba(0, 217, 255, 0.1);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+}
+
+.feature-item span {
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* Custom Scrollbar */
+#streamTranscription::-webkit-scrollbar { 
+    width: 8px; 
+}
+#streamTranscription::-webkit-scrollbar-track { 
+    background: transparent; 
+    border-radius: 4px;
+}
+#streamTranscription::-webkit-scrollbar-thumb {
+    background: rgba(74, 126, 255, 0.3);
+    border-radius: 4px;
+}
+
+#streamTranscription::-webkit-scrollbar-thumb:hover { 
+    background: rgba(74, 126, 255, 0.5); 
+}
+
+.chat-message {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    border-radius: 16px;
+    animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    max-width: 80%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid;
+    border-image: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.user-message {
+    background: linear-gradient(135deg, rgba(123, 97, 255, 0.1), rgba(74, 126, 255, 0.1));
+    border-color: rgba(108, 86, 238, 0.2);
+    margin-left: auto;
+}
+
+.bot-message {
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(74, 126, 255, 0.1));
+    border-color: rgba(0, 217, 255, 0.2);
+    margin-right: auto;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.message-time { 
+    font-size: 0.8rem; 
+    color: var(--text-muted); 
+}
+
+/* --- Stats Section --- */
+#stats-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding: 1.5rem 0 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.stat-pod {
+    text-align: center;
+    transition: transform 0.3s ease;
+    padding: 0 1rem;
+}
+
+.stat-pod:hover { transform: translateY(-5px); }
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+/* Hidden Audio Element */
+#llmBotAudio { display: none; }
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    animation: modalFadeIn 0.3s;
+}
+
+.modal-content {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    margin: 5% auto;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 550px;
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.75rem;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(16, 24, 48, 0.5);
+}
+
+.modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.close {
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.close:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.modal-body {
+    padding: 1.75rem;
+}
+
+.modal-description {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.875rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: rgba(16, 24, 48, 0.4);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.2);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 0.875rem 1.75rem;
+    border-radius: 12px;
+    border: none;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    color: white;
+    flex: 2;
+    box-shadow: 0 5px 15px rgba(108, 86, 238, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(108, 86, 238, 0.4);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    flex: 1;
+}
+
+.btn-secondary:hover {
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    background: rgba(0, 217, 255, 0.05);
+}
+
+/* Notification Styles */
+#apiNotification {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    padding: 14px 22px;
+    border-radius: 12px;
+    z-index: 1001;
+    font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    animation: slideIn 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100px); opacity: 0; }
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    #app-container { 
+        height: auto; 
+        min-height: 95vh; 
+        padding: 1.5rem; 
+        margin: 1.5vh auto;
+    }
+    
+    .feature-list { 
+        flex-direction: column; 
+        gap: 1.5rem; 
+    }
+    
+    #core-orb { width: 160px; height: 160px; }
+    #recordBtn { width: 140px; height: 140px; font-size: 3rem; }
+    
+    .chat-message { max-width: 90%; }
+    
+    #stats-container { 
+        flex-wrap: wrap; 
+        gap: 1.5rem; 
+        padding-top: 1.5rem;
+    }
+    
+    .stat-pod {
+        flex: 1;
+        min-width: 100px;
+    }
+    
+    .form-actions { flex-direction: column; }
+}
+
+@media (max-width: 600px) {
+    #app-container {
+        border-radius: 16px;
+        padding: 1.25rem;
+    }
+    
+    .app-header h1 { font-size: 1.75rem; }
+    
+    #core-orb { width: 140px; height: 140px; }
+    #recordBtn { width: 120px; height: 120px; font-size: 2.75rem; }
+    
+    #streamTranscription { padding: 1rem; }
+    
+    .modal-content {
+        margin: 10% auto;
+        width: 95%;
+    }
+}
+    </style>
+</head>
+<body>
+   <div id="aurora-background">
+        <div class="aurora-shape aurora-shape-1"></div>
+        <div class="aurora-shape aurora-shape-2"></div>
+        <div class="aurora-shape aurora-shape-3"></div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>API Configuration</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">Enter your API keys to enable all features. Keys are stored locally in your browser.</p>
+                
+                <form id="apiKeyForm">
+                    <div class="form-group">
+                        <label for="assemblyaiKey">AssemblyAI API Key</label>
+                        <input type="password" id="assemblyaiKey" placeholder="Enter your AssemblyAI key">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="murfKey">Murf AI API Key</label>
+                        <input type="password" id="murfKey" placeholder="Enter your Murf AI key">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="geminiKey">Gemini API Key</label>
+                        <input type="password" id="geminiKey" placeholder="Enter your Gemini key">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tmdbKey">TMDB API Key (Optional)</label>
+                        <input type="password" id="tmdbKey" placeholder="Enter your TMDB key">
+                        <small>Required for movie dialogue features</small>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Save Configuration</button>
+                        <button type="button" id="clearKeys" class="btn-secondary">Clear All Keys</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <main id="app-container">
+        <header class="app-header">
+            <div class="header-content">
+                <div>
+                    <h1>SARC-AI</h1>
+                    <p>Your Personal AI Conversation Partner</p>
+                </div>
+                <button id="settingsBtn" class="settings-btn" title="API Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </header>
+
+        <section id="core-container">
+            <div id="core-orb">
+                <button id="recordBtn">
+                    <span id="btnIcon" class="btn-icon"><i class="fas fa-microphone"></i></span>
+                </button>
+                <div id="core-pulse"></div>
+                <div id="core-waves"></div>
+            </div>
+            <div id="llmBotStatus">
+                <span>Configure API keys to begin</span>
+            </div>
+        </section>
+
+        <section id="conversation-container">
+            <div id="streamTranscription">
+                <div class="welcome-message">
+                    <h3>Welcome to VoiceAI Pro!</h3>
+                    <p>Please configure your API keys using the settings button to start the conversation.</p>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <i class="fas fa-microphone"></i>
+                            <span>Voice conversations</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-film"></i>
+                            <span>Movie dialogues</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-calculator"></i>
+                            <span>Calculations</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer id="stats-container">
+            <div class="stat-pod">
+                <div class="stat-value" id="wordsCount">0</div>
+                <div class="stat-label">Words</div>
+            </div>
+            <div class="stat-pod">
+                <div class="stat-value" id="charactersCount">0</div>
+                <div class="stat-label">Characters</div>
+            </div>
+            <div class="stat-pod">
+                <div class="stat-value" id="messagesCount">0</div>
+                <div class="stat-label">Messages</div>
+            </div>
+        </footer>
+
+        <audio id="llmBotAudio"></audio>
+    </main>
+</body>
+</html>

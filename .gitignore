@@ -1,0 +1,19 @@
+# Python Virtual Environment
+# Isme saari installed libraries hoti hain, isko upload karna zaroori nahi hai.
+.venv/
+venv/
+
+# Python cache files
+# Yeh files Python automatically banata hai, inki zaroorat nahi hoti.
+pycache/
+
+# Environment Variables File (SABSE ZAROORI)
+# Isme aapke API keys jaise secrets hote hain. Ise kabhi GitHub par na dalein.
+.env
+
+# VS Code specific files (Optional)
+.vscode/
+
+# Other common Python ignores
+*.pyc
+.DS_Store
