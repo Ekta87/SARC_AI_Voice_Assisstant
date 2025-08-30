@@ -81,14 +81,12 @@ http://127.0.0.1:8000
 
 ```mermaid
 flowchart LR
-    A[🎤 User Speaks] --> B[🌐 Browser (main.js)]
-    B -->|WebSocket Audio Stream| C[⚡ FastAPI Backend]
-    C --> D[📝 AssemblyAI STT]
-    D --> E[🤖 Gemini AI Processing]
-    E --> F[🔊 Murf TTS]
-    F -->|Audio Response| C
-    C -->|Text + Audio| B
-    B --> G[💬 Chat UI + 🔊 Audio Player]
+    U[User] --> FE[Frontend (index.html + main.js)]
+    FE --> BE[Backend (FastAPI - main.py)]
+    BE --> CP[Command Processing]
+    CP --> RH[Response Generation]
+    RH --> FE
+    FE --> U[Output Shown/Played]
 ```
 
 ---
