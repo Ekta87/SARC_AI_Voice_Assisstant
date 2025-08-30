@@ -81,12 +81,12 @@ http://127.0.0.1:8000
 
 ```mermaid
 flowchart LR
-    U[User] --> FE[Frontend (index.html + main.js)]
-    FE --> BE[Backend (FastAPI - main.py)]
+    U[User] --> FE[Frontend: index.html + main.js]
+    FE --> BE[Backend: FastAPI main.py]
     BE --> CP[Command Processing]
     CP --> RH[Response Generation]
     RH --> FE
-    FE --> U[Output Shown/Played]
+    FE --> U[Output to User]
 ```
 
 ---
